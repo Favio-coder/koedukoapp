@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
     plugins: [
@@ -17,8 +18,10 @@ export default defineConfig({
                 }),
             ],
         }),
+
         inertia(),
         tailwindcss(),
+
         vue({
             template: {
                 transformAssetUrls: {
@@ -27,8 +30,41 @@ export default defineConfig({
                 },
             },
         }),
+
         wayfinder({
             formVariants: true,
+        }),
+
+        // ✅ PWA agregado aquí
+        VitePWA({
+            registerType: 'autoUpdate',
+
+            manifest: {
+                name: 'KoEduko',
+                short_name: 'KoEduko',
+                description: 'Plataforma educativa KoEduko',
+                theme_color: '#ffffff',
+                background_color: '#ffffff',
+                display: 'standalone',
+                start_url: '/',
+
+                icons: [
+                    {
+                        src: '/apple-touch-icon.png',
+                        sizes: '192x192',
+                        type: 'image/png',
+                    },
+                    {
+                        src: '/apple-touch-icon.png',
+                        sizes: '512x512',
+                        type: 'image/png',
+                    },
+                ],
+            },
+
+            workbox: {
+                globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
+            },
         }),
     ],
 });
